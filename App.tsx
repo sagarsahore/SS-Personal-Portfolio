@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './components/Home';
 import { AboutPage } from './components/AboutPage';
 
@@ -16,12 +16,12 @@ const LoadingScreen = () => (
 const App: React.FC = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <BrowserRouter>
+      <HashRouter>
           <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
           </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </Suspense>
   );
 };
