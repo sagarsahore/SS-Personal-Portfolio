@@ -35,9 +35,15 @@ export const Hero: React.FC = () => {
         animate="visible"
       >
         <motion.div variants={itemVariants}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs tracking-wider uppercase mb-6">
-            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-            Researcher • University of Auckland
+          <div className="inline-flex items-center gap-3 px-2 py-1.5 pr-4 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs tracking-wider uppercase mb-6 hover:bg-indigo-500/20 transition-colors cursor-default">
+            <div className="w-6 h-6 rounded-full overflow-hidden border border-indigo-500/30">
+                <img 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" 
+                    alt="Sagar Sahore" 
+                    className="w-full h-full object-cover filter saturate-[0.8]"
+                />
+            </div>
+            <span>Researcher • University of Auckland</span>
           </div>
         </motion.div>
         
