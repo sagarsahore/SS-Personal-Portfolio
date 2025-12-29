@@ -30,42 +30,45 @@ const stack = [
 
 export const LogoTicker: React.FC = () => {
   return (
-    <section className="w-full relative py-8 overflow-hidden">
+    <section className="w-full relative py-20 overflow-visible">
         {/* Background Visuals */}
-        <div className="absolute inset-0 bg-white/5 backdrop-blur-md border-y border-white/5 z-0"></div>
+        <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-xl border-y border-white/[0.05] z-0"></div>
         
-        {/* Label - Optional "Personality" touch */}
-        <div className="absolute left-1/2 -top-3 -translate-x-1/2 bg-[#020204] px-4 py-1 rounded-full border border-white/10 z-20">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
+        {/* Label - Fixed positioning and z-index to ensure visibility */}
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-6 py-2 rounded-full border border-white/15 z-30 shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+            <span className="text-[12px] font-mono font-bold uppercase tracking-[0.25em] text-white/80">
                 Daily Drivers & Essentials
             </span>
         </div>
 
-        {/* Fade Masks for seamless loop illusion */}
-        <div className="absolute top-0 left-0 h-full w-32 bg-gradient-to-r from-[#020204] to-transparent z-10 pointer-events-none" />
-        <div className="absolute top-0 right-0 h-full w-32 bg-gradient-to-l from-[#020204] to-transparent z-10 pointer-events-none" />
+        {/* Outer container with hidden overflow for the loop */}
+        <div className="relative overflow-hidden w-full py-4">
+            {/* Fade Masks for seamless loop illusion */}
+            <div className="absolute top-0 left-0 h-full w-48 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none" />
+            <div className="absolute top-0 right-0 h-full w-48 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none" />
 
-        <div className="flex relative z-0">
-            <motion.div 
-            className="flex gap-16 md:gap-24 items-center pr-16 md:pr-24 whitespace-nowrap"
-            animate={{ x: [0, -1000] }} // Adjusted for roughly the content width
-            transition={{ 
-                duration: 40, 
-                ease: "linear", 
-                repeat: Infinity,
-            }}
-            >
-            {[...stack, ...stack, ...stack].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 group cursor-default transition-all duration-300 hover:scale-105">
-                    <div className={`transition-colors duration-300 text-zinc-600 group-hover:${item.color} filter drop-shadow-lg`}>
-                        {item.icon}
+            <div className="flex relative z-0">
+                <motion.div 
+                className="flex gap-16 md:gap-32 items-center pr-16 md:pr-32 whitespace-nowrap"
+                animate={{ x: [0, -2000] }} 
+                transition={{ 
+                    duration: 50, 
+                    ease: "linear", 
+                    repeat: Infinity,
+                }}
+                >
+                {[...stack, ...stack, ...stack, ...stack].map((item, i) => (
+                    <div key={i} className="flex items-center gap-4 group cursor-default transition-all duration-300 hover:scale-105">
+                        <div className={`transition-all duration-300 text-zinc-500 group-hover:${item.color} group-hover:scale-110`}>
+                            {item.icon}
+                        </div>
+                        <span className="text-xl font-medium tracking-tight text-zinc-400 group-hover:text-white transition-colors">
+                            {item.name}
+                        </span>
                     </div>
-                    <span className="text-lg font-medium tracking-tight text-zinc-500 group-hover:text-zinc-200 transition-colors">
-                        {item.name}
-                    </span>
-                </div>
-            ))}
-            </motion.div>
+                ))}
+                </motion.div>
+            </div>
         </div>
     </section>
   );

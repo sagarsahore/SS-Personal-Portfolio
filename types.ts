@@ -21,6 +21,7 @@ export interface ResearchPillar {
 export interface Project {
   id: string;
   title: string;
+  role: string;
   description: string;
   tags: string[];
   category: 'AI' | 'Salesforce' | 'Data';

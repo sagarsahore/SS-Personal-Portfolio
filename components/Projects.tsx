@@ -9,6 +9,7 @@ const projects: Project[] = [
     {
         id: '1',
         title: 'Sentient',
+        role: 'Lead AI Architect',
         description: 'An open-source autonomous agent framework designed for complex reasoning tasks with self-correction capabilities.',
         tags: ['Python', 'LangChain', 'OpenAI'],
         category: 'AI',
@@ -20,6 +21,7 @@ const projects: Project[] = [
     {
         id: '2',
         title: 'NeuraVis',
+        role: 'Visualization Lead',
         description: 'Real-time 3D visualization tool for inspecting activations in transformer attention heads.',
         tags: ['React', 'Three.js', 'WebGL'],
         category: 'AI',
@@ -29,6 +31,7 @@ const projects: Project[] = [
     {
         id: '3',
         title: 'EchoLatent',
+        role: 'ML Engineer',
         description: 'Generative audio model mapping sound waves to latent space representations for semantic search.',
         tags: ['PyTorch', 'Audio', 'FastAPI'],
         category: 'AI',
@@ -38,6 +41,7 @@ const projects: Project[] = [
     {
         id: '4',
         title: 'VisionTransformer-Slim',
+        role: 'Research Engineer',
         description: 'A pruned version of ViT optimized for edge devices, retaining 95% accuracy with 40% less compute.',
         tags: ['Computer Vision', 'Edge AI'],
         category: 'AI',
@@ -49,6 +53,7 @@ const projects: Project[] = [
     {
         id: '5',
         title: 'Apex Neural Bridge',
+        role: 'Salesforce Developer',
         description: 'Enterprise connector allowing Salesforce Apex triggers to invoke custom ML endpoints asynchronously.',
         tags: ['Salesforce', 'Apex', 'Rest API'],
         category: 'Salesforce',
@@ -58,6 +63,7 @@ const projects: Project[] = [
     {
         id: '6',
         title: 'LWC Analytics Dashboard',
+        role: 'Full Stack Developer',
         description: 'Custom Lightning Web Component suite for visualizing complex opportunity pipelines with D3.js integration.',
         tags: ['LWC', 'JavaScript', 'CRM'],
         category: 'Salesforce',
@@ -66,6 +72,7 @@ const projects: Project[] = [
     {
         id: '7',
         title: 'Automated Lead Scoring',
+        role: 'Solutions Architect',
         description: 'Einstein-based predictive model implementation to score leads based on historical interaction data.',
         tags: ['Einstein AI', 'Flows'],
         category: 'Salesforce',
@@ -76,6 +83,7 @@ const projects: Project[] = [
     {
         id: '8',
         title: 'Pipeline Orchestrator',
+        role: 'Data Engineer',
         description: 'Distributed ETL pipeline capable of processing 2TB of unstructured data daily for model training.',
         tags: ['Apache Airflow', 'Spark', 'AWS'],
         category: 'Data',
@@ -85,6 +93,7 @@ const projects: Project[] = [
     {
         id: '9',
         title: 'Market Sentiment Graph',
+        role: 'Knowledge Engineer',
         description: 'Knowledge graph construction from financial news feeds to detect market anomalies in real-time.',
         tags: ['Neo4j', 'NLP', 'Kafka'],
         category: 'Data',
@@ -94,6 +103,7 @@ const projects: Project[] = [
     {
         id: '10',
         title: 'GeoSpatial Crime Analysis',
+        role: 'Data Scientist',
         description: 'Statistical modeling of urban crime patterns using geospatial clustering algorithms.',
         tags: ['Pandas', 'GeoJSON', 'Scikit'],
         category: 'Data',
@@ -177,8 +187,8 @@ export const Projects: React.FC = () => {
                                 </div>
 
                                 <div className="p-6 flex flex-col flex-1">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <h3 className="text-xl font-medium text-white group-hover:text-indigo-300 transition-colors line-clamp-1">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <h3 className="text-xl font-bold text-white group-hover:text-red-400 transition-colors line-clamp-1">
                                             {project.title}
                                         </h3>
                                         <div className="flex gap-2">
@@ -194,8 +204,13 @@ export const Projects: React.FC = () => {
                                             )}
                                         </div>
                                     </div>
+
+                                    {/* Role Display - More prominent and stylized */}
+                                    <div className="mb-4 text-[10px] font-mono font-bold uppercase tracking-widest text-red-500/80">
+                                        {project.role}
+                                    </div>
                                     
-                                    <p className="text-white/60 text-sm leading-relaxed mb-6 flex-1 line-clamp-3">
+                                    <p className="text-white/60 text-sm leading-relaxed mb-6 flex-1 line-clamp-3 font-light">
                                         {project.description}
                                     </p>
                                     

@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { GlassCard } from './GlassCard';
-import { Beaker, Briefcase, Users, Star, Quote as QuoteIcon, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Sparkles, Quote, ChevronRight, ChevronLeft, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Testimonial {
@@ -10,272 +10,177 @@ interface Testimonial {
     role: string;
     org: string;
     category: 'Research' | 'Engineering' | 'Leadership';
+    image?: string;
 }
 
 const testimonials: Testimonial[] = [
-    // RESEARCH (Academic & Labs)
     {
         id: '1',
-        quote: "Aether's work on stochastic flows fundamentally shifted how we approach sampling efficiency. A rare combination of theoretical depth and engineering prowess.",
+        quote: "Sagar's work on stochastic flows fundamentally shifted how we approach sampling efficiency. A rare combination of theoretical depth and engineering prowess. His ability to distill complex mathematical concepts into production-ready architectures is unmatched.",
         author: "Dr. Elena Vance",
         role: "Principal Scientist",
         org: "DeepMind",
-        category: 'Research'
+        category: 'Research',
+        image: "https://i.pravatar.cc/150?u=elena"
     },
     {
         id: '2',
-        quote: "Few researchers can navigate the complexities of causal alignment with such clarity. His contributions to our lab's interpretability framework were instrumental.",
+        quote: "Few researchers can navigate the complexities of causal alignment with such clarity. His contributions to our lab's interpretability framework were instrumental in identifying critical safety failure modes that were previously invisible.",
         author: "Prof. Marcus Thorne",
         role: "Director",
         org: "Stanford AI Lab",
-        category: 'Research'
+        category: 'Research',
+        image: "https://i.pravatar.cc/150?u=marcus"
     },
-    {
-        id: '3',
-        quote: "His thesis on mechanistic interpretability provided the mathematical grounding we needed to verify our safety constraints. Exceptional academic rigor.",
-        author: "Prof. Li Wei",
-        role: "Department Chair",
-        org: "UC Berkeley",
-        category: 'Research'
-    },
-
-    // ENGINEERING (Industry & Product)
     {
         id: '4',
-        quote: "Implemented our vision backbone 3x faster than projected while maintaining SOTA accuracy. He builds systems that survive production scale.",
+        quote: "Implemented our vision backbone 3x faster than projected while maintaining SOTA accuracy. He builds systems that survive production scale and handles the most volatile compute environments with a calm, rigorous philosophy.",
         author: "Sarah Chen",
         role: "Lead CV Engineer",
         org: "OpenAI",
-        category: 'Engineering'
-    },
-    {
-        id: '5',
-        quote: "Transformed our legacy CRM data pipelines into a real-time event architecture. The system he architected still powers our core analytics today.",
-        author: "James Holloway",
-        role: "VP of Engineering",
-        org: "Salesforce",
-        category: 'Engineering'
-    },
-    {
-        id: '6',
-        quote: "Bridged the gap between experimental ML models and scalable cloud infrastructure. A true full-stack intelligence architect.",
-        author: "Dr. Richard Socher",
-        role: "Chief Scientist",
-        org: "CloudFirst Solutions",
-        category: 'Engineering'
-    },
-
-    // LEADERSHIP (Mentorship & Soft Skills)
-    {
-        id: '7',
-        quote: "The best mentor I've ever had. He didn't just review my code; he taught me how to think about systems and abstractions.",
-        author: "Emily Zhang",
-        role: "Junior ML Engineer",
-        org: "Anthropic",
-        category: 'Leadership'
-    },
-    {
-        id: '8',
-        quote: "Led the 'Safe AI' reading group with such charisma that attendance tripled in a month. He makes complex topics accessible and exciting.",
-        author: "Dr. Aris Thorne",
-        role: "Research Scientist",
-        org: "Google Research",
-        category: 'Leadership'
-    },
-    {
-        id: '9',
-        quote: "His ability to communicate technical risks to non-technical stakeholders saved us months of wasted development time.",
-        author: "Michael Ross",
-        role: "Product Director",
-        org: "Meta",
-        category: 'Leadership'
+        category: 'Engineering',
+        image: "https://i.pravatar.cc/150?u=sarah"
     }
 ];
 
-type Category = 'All' | 'Research' | 'Engineering' | 'Leadership';
-
-const categories: { id: Category; label: string; icon: React.ReactNode }[] = [
-    { id: 'All', label: 'View All', icon: <Star size={14} /> },
-    { id: 'Research', label: 'Academic & Labs', icon: <Beaker size={14} /> },
-    { id: 'Engineering', label: 'Industry Impact', icon: <Briefcase size={14} /> },
-    { id: 'Leadership', label: 'Mentorship', icon: <Users size={14} /> },
-];
-
 export const Testimonials: React.FC = () => {
-    const [activeCategory, setActiveCategory] = useState<Category>('All');
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    const filtered = activeCategory === 'All' 
-        ? testimonials 
-        : testimonials.filter(t => t.category === activeCategory);
+    const next = () => setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    const prev = () => setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
-    // Reset scroll when category changes
-    useEffect(() => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        }
-    }, [activeCategory]);
-
-    const handleScroll = (direction: 'left' | 'right') => {
-        if (scrollContainerRef.current) {
-            const container = scrollContainerRef.current;
-            
-            // Find the width of the first card to determine scroll stride
-            // We use querySelector to find the first snap-center element
-            const cardElement = container.querySelector('[data-snap-card]');
-            
-            if (cardElement) {
-                const cardWidth = cardElement.getBoundingClientRect().width;
-                const gap = 24; // Corresponds to gap-6 (1.5rem = 24px)
-                const stride = cardWidth + gap;
-                
-                container.scrollBy({
-                    left: direction === 'left' ? -stride : stride,
-                    behavior: 'smooth'
-                });
-            } else {
-                // Fallback if DOM not ready
-                container.scrollBy({
-                    left: direction === 'left' ? -400 : 400,
-                    behavior: 'smooth'
-                });
-            }
-        }
-    };
+    const t = testimonials[currentIndex];
 
     return (
-        <section className="py-24 relative">
-             {/* Section Header */}
-            <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-12 gap-8 px-4 md:px-0">
-                <div className="max-w-2xl">
-                    <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-                        Literature Gallery
-                    </h2>
-                    <p className="text-lg text-zinc-400 font-light leading-relaxed">
-                        A compendium of perspectives on my work, spanning rigorous academic research, scalable engineering, and technical leadership.
-                    </p>
-                </div>
+        <section className="py-24 relative px-4 flex flex-col items-center">
+            {/* Background Ambient Glow */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
 
-                {/* Filter Tabs - Dark Pill Design */}
-                <div className="flex flex-wrap gap-1 p-1.5 bg-[#121212] rounded-3xl border border-white/10 shadow-2xl">
-                    {categories.map((cat) => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setActiveCategory(cat.id)}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-medium transition-all duration-300 relative ${
-                                activeCategory === cat.id ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
-                            }`}
-                        >
-                            {activeCategory === cat.id && (
-                                <motion.div
-                                    layoutId="activeTestimonialTab"
-                                    className="absolute inset-0 bg-white/10 rounded-2xl border border-white/5"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
-                            <span className="relative z-10 flex items-center gap-2">
-                                {cat.icon} {cat.label}
-                            </span>
-                        </button>
-                    ))}
+            <div className="max-w-5xl w-full mb-12">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/10 border border-red-600/20 text-red-500 text-[10px] font-mono tracking-widest uppercase mb-6">
+                    <Sparkles size={10} />
+                    Literature Gallery
                 </div>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
+                    Verified Perspectives.
+                </h2>
+            </div>
+
+            <div className="relative w-full max-w-5xl group">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentIndex}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                    >
+                        <GlassCard className="!p-0 overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] border-white/[0.05]">
+                            <div className="grid grid-cols-1 md:grid-cols-2">
+                                
+                                {/* Left Content: The Testimonial */}
+                                <div className="p-10 md:p-16 flex flex-col justify-center bg-gradient-to-br from-white/[0.01] to-transparent relative z-10">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAB308]/10 border border-[#EAB308]/20 text-[#EAB308] text-[10px] font-mono tracking-widest uppercase w-fit mb-8">
+                                        <ShieldCheck size={12} />
+                                        Verified {t.category} Ref
+                                    </div>
+
+                                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">
+                                        {t.org}.
+                                    </h3>
+                                    
+                                    <blockquote className="text-xl text-zinc-400 mb-10 leading-relaxed font-light italic">
+                                        "{t.quote}"
+                                    </blockquote>
+
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-full border-2 border-white/10 overflow-hidden grayscale opacity-70">
+                                            <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
+                                        </div>
+                                        <div>
+                                            <div className="text-white font-semibold text-lg">{t.author}</div>
+                                            <div className="text-xs text-zinc-500 uppercase tracking-widest">{t.role}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Visual: Identity Stage */}
+                                <div className="relative min-h-[300px] md:min-h-full bg-[#0A0A0A]/50 border-l border-white/[0.03] flex items-center justify-center overflow-hidden">
+                                    <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay"></div>
+                                    
+                                    {/* Focus Ring */}
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full"></div>
+
+                                    <div className="relative p-12 w-full flex flex-col items-center">
+                                        <motion.div 
+                                            animate={{ y: [0, -10, 0] }}
+                                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                            className="w-48 h-64 rounded-2xl bg-zinc-900/80 border border-white/10 backdrop-blur-xl flex flex-col items-center justify-center p-6 shadow-2xl"
+                                        >
+                                            <Quote size={40} className="text-red-600/20 mb-6" />
+                                            <div className="space-y-3 w-full opacity-40">
+                                                <div className="h-1.5 w-full bg-white/10 rounded-full"></div>
+                                                <div className="h-1.5 w-full bg-white/10 rounded-full"></div>
+                                                <div className="h-1.5 w-2/3 bg-white/10 rounded-full"></div>
+                                            </div>
+                                            <div className="mt-auto w-full flex justify-between items-end">
+                                                <div className="w-8 h-8 rounded bg-red-600/20"></div>
+                                                <div className="text-[8px] font-mono text-white/20">AUTH-REF-{t.id}</div>
+                                            </div>
+                                        </motion.div>
+                                        
+                                        {/* Floating Badge */}
+                                        <motion.div 
+                                            animate={{ x: [0, 10, 0], y: [0, 15, 0] }}
+                                            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+                                            className="absolute top-1/4 right-12 bg-white/[0.03] backdrop-blur-md border border-white/10 p-4 rounded-xl shadow-2xl hidden md:block"
+                                        >
+                                            <div className="flex gap-1 mb-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-white/10"></div>
+                                            </div>
+                                            <div className="h-1 w-16 bg-white/10 rounded-full"></div>
+                                        </motion.div>
+                                    </div>
+                                </div>
+                            </div>
+                        </GlassCard>
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Navigation Controls */}
+                <div className="absolute top-1/2 -left-6 md:-left-16 -translate-y-1/2 z-20">
+                    <button 
+                        onClick={prev}
+                        className="w-12 h-12 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-white hover:bg-zinc-800 transition-all active:scale-95 shadow-xl"
+                    >
+                        <ChevronLeft size={24} />
+                    </button>
+                </div>
+                <div className="absolute top-1/2 -right-6 md:-right-16 -translate-y-1/2 z-20">
+                    <button 
+                        onClick={next}
+                        className="w-12 h-12 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-white hover:bg-zinc-800 transition-all active:scale-95 shadow-xl"
+                    >
+                        <ChevronRight size={24} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Pagination Indicators */}
+            <div className="flex gap-2 mt-12">
+                {testimonials.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setCurrentIndex(i)}
+                        className={`h-1.5 transition-all duration-300 rounded-full ${i === currentIndex ? 'w-8 bg-red-600' : 'w-2 bg-white/10'}`}
+                    />
+                ))}
             </div>
             
-            {/* Horizontal Scroll Layout */}
-            <div className="relative w-full group">
-                {/* Gradient Masks for Scroll Effect */}
-                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none md:block hidden" />
-                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none md:block hidden" />
-
-                <div 
-                    ref={scrollContainerRef}
-                    className="flex gap-6 overflow-x-auto pb-12 snap-x snap-mandatory px-4 md:px-0 no-scrollbar scroll-smooth"
-                    style={{ 
-                        scrollbarWidth: 'none', 
-                        msOverflowStyle: 'none',
-                    }}
-                >
-                    <AnimatePresence mode="popLayout">
-                        {filtered.map((t) => (
-                            <motion.div
-                                key={t.id}
-                                layout
-                                data-snap-card
-                                initial={{ opacity: 0, scale: 0.9, x: 20 }}
-                                animate={{ opacity: 1, scale: 1, x: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-                                // Reduced min-width from 420px to 360px for better fit and faster scanning
-                                className="min-w-[85vw] md:min-w-[360px] lg:min-w-[380px] snap-center h-full flex-shrink-0"
-                            >
-                                <GlassCard 
-                                    className="h-full !p-8 md:!p-10 flex flex-col justify-between group transition-all duration-500 bg-[#0e0e0e] border-white/10 hover:border-indigo-500/30 hover:bg-[#151515]"
-                                    hoverEffect={true}
-                                >
-                                    {/* Quote Icon */}
-                                    <div className="mb-6">
-                                        <QuoteIcon className="text-indigo-500 w-10 h-10 opacity-80" strokeWidth={1.5} />
-                                    </div>
-
-                                    {/* Quote Content */}
-                                    <div className="relative z-10 flex-grow">
-                                        <p className="text-lg text-white/90 leading-relaxed font-light italic mb-8">
-                                            "{t.quote}"
-                                        </p>
-                                    </div>
-                                    
-                                    {/* Author Block */}
-                                    <div className="relative z-10 border-t border-white/5 pt-6 mt-4 flex items-center justify-between">
-                                        <div>
-                                            <h4 className="text-white font-semibold text-base group-hover:text-indigo-200 transition-colors">
-                                                {t.author}
-                                            </h4>
-                                            <div className="text-sm text-zinc-500 mt-1">
-                                                {t.role}
-                                            </div>
-                                             <div className="text-xs text-indigo-400 mt-1 font-medium">
-                                                {t.org}
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Category Icon Badge */}
-                                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 border border-white/5 group-hover:bg-indigo-500/10 group-hover:text-indigo-400 group-hover:border-indigo-500/20 transition-all shrink-0">
-                                            {t.category === 'Research' && <Beaker size={18} />}
-                                            {t.category === 'Engineering' && <Briefcase size={18} />}
-                                            {t.category === 'Leadership' && <Users size={18} />}
-                                        </div>
-                                    </div>
-                                </GlassCard>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-                    
-                    {/* Padding at end for scroll snap */}
-                    <div className="w-12 flex-shrink-0" /> 
-                </div>
-            </div>
-
-            {/* Bottom Controls */}
-            <div className="mt-4 flex justify-between items-center px-4 md:px-0">
-                <p className="text-xs text-white/20 font-mono uppercase tracking-widest">
-                    References available upon request
-                </p>
-                <div className="hidden md:flex gap-3">
-                     <button 
-                        onClick={() => handleScroll('left')}
-                        className="w-12 h-12 rounded-full bg-[#1A1A1A] border border-white/10 flex items-center justify-center text-white hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all shadow-lg"
-                        aria-label="Scroll left"
-                     >
-                        <ChevronLeft size={20} />
-                     </button>
-                     <button 
-                        onClick={() => handleScroll('right')}
-                        className="w-12 h-12 rounded-full bg-[#1A1A1A] border border-white/10 flex items-center justify-center text-white hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all shadow-lg"
-                        aria-label="Scroll right"
-                     >
-                        <ChevronRight size={20} />
-                     </button>
-                </div>
-            </div>
+            <p className="mt-8 text-[10px] font-mono uppercase tracking-[0.3em] text-white/10">
+                Official professional documentation archive • 2025
+            </p>
         </section>
     );
 };

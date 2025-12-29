@@ -3,10 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sagar Sahore | AI Research</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Sagar Sahore | AI Research & Systems Architecture</title>
+    <meta name="description" content="Portfolio of Sagar Sahore - Ph.D. Researcher at Stanford and AI Systems Engineer. Bridging biological intuition and synthetic reasoning.">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sagar Sahore | AI Research Portfolio">
+    <meta property="og:description" content="VisionOS inspired portfolio for an AI/ML Researcher featuring liquid glass aesthetics and 3D interactive elements.">
+    <meta property="og:image" content="images/erasebg-transformed.png">
+
+    <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://esm.sh">
+    <link rel="prefetch" href="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/potsdamer_platz_1k.hdr">
+
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
@@ -17,14 +29,14 @@
               mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
             },
             colors: {
-              midnight: '#050505', // Deep matte black
+              midnight: '#050505',
               surface: {
                  100: 'rgba(255, 255, 255, 0.03)',
                  200: 'rgba(255, 255, 255, 0.05)',
                  300: 'rgba(255, 255, 255, 0.08)',
               },
               primary: {
-                DEFAULT: '#DC2626', // Crimson Red
+                DEFAULT: '#DC2626',
                 glow: '#EF4444',
                 dark: '#991B1B'
               }
@@ -62,42 +74,37 @@
 
       body {
         background-color: #050505;
-        color: #f5f5f7; /* Apple Off-White */
+        color: #f5f5f7;
         overflow-x: hidden;
         margin: 0;
         padding: 0;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        selection-background-color: rgba(220, 38, 38, 0.3); /* Red selection */
-        selection-color: #fff;
       }
       
-      /* Refined Scrollbar */
-      body::-webkit-scrollbar {
-        width: 10px;
-      }
-      body::-webkit-scrollbar-track {
-        background: #050505; 
-      }
+      body::-webkit-scrollbar { width: 10px; }
+      body::-webkit-scrollbar-track { background: #050505; }
       body::-webkit-scrollbar-thumb {
         background: #262626; 
         border-radius: 5px;
         border: 2px solid #050505;
       }
-      body::-webkit-scrollbar-thumb:hover {
-        background: #404040; 
-      }
+      body::-webkit-scrollbar-thumb:hover { background: #404040; }
 
-      /* Utility for smooth text rendering */
-      .text-balance {
-        text-wrap: balance;
-      }
-      
-      /* Image Masking for Avatar Blend */
+      .text-balance { text-wrap: balance; }
       .mask-gradient-b {
         mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       }
+
+      /* Global focus styles for accessibility */
+      :focus-visible {
+        outline: 2px solid #DC2626;
+        outline-offset: 4px;
+      }
+
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
   <script type="importmap">
 {
@@ -123,10 +130,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
-    <script>
-      window.addEventListener('error', function(e) {
-        console.error('Global Error caught:', e.error);
-      });
-    </script>
   </body>
 </html>

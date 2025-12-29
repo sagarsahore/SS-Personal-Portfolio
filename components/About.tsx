@@ -36,7 +36,7 @@ export const About: React.FC = () => {
             </button>
           </div>
 
-           {/* Stats Cards */}
+           {/* Stats Cards - Expanded to 4 blocks */}
            <div className="grid grid-cols-2 gap-4">
                  <GlassCard className="!p-6 text-center group hover:bg-white/5 transition-colors border-t-4 border-t-red-500/50">
                     <div className="text-4xl font-semibold text-white group-hover:text-red-400 transition-colors">4+</div>
@@ -45,6 +45,16 @@ export const About: React.FC = () => {
                  <GlassCard className="!p-6 text-center group hover:bg-white/5 transition-colors border-t-4 border-t-indigo-500/50">
                     <div className="text-4xl font-semibold text-white group-hover:text-red-400 transition-colors">∞</div>
                     <div className="text-[10px] uppercase tracking-wider text-white/40 mt-2">GPU Hours</div>
+                 </GlassCard>
+                 {/* New: Superbadges block */}
+                 <GlassCard className="!p-6 text-center group hover:bg-white/5 transition-colors border-t-4 border-t-amber-500/50">
+                    <div className="text-4xl font-semibold text-white group-hover:text-amber-400 transition-colors">12</div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mt-2">Superbadges</div>
+                 </GlassCard>
+                 {/* New: Double Range block */}
+                 <GlassCard className="!p-6 text-center group hover:bg-white/5 transition-colors border-t-4 border-t-emerald-500/50">
+                    <div className="text-4xl font-semibold text-white group-hover:text-emerald-400 transition-colors">Double</div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mt-2">Range</div>
                  </GlassCard>
             </div>
         </div>

@@ -1,104 +1,131 @@
 import React, { useRef, useMemo, Suspense } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
-const SynapticField = () => {
+const SynapticField = React.memo(() => {
     const ref = useRef<THREE.Points>(null);
+    const mouse = useRef(new THREE.Vector2(0, 0));
     
-    // Create a field of particles representing neural connections
     const sphere = useMemo(() => {
         const count = 4000;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
+        const sizes = new Float32Array(count);
         const color = new THREE.Color();
         
         for (let i = 0; i < count; i++) {
-            // Randomize radius to create a volumetric cloud rather than a shell
-            // Distribution biased towards outer edges for depth but filling the center
-            const r = 10 + Math.random() * 50; 
+            const r = 15 + Math.random() * 55; 
             const theta = 2 * Math.PI * Math.random();
             const phi = Math.acos(2 * Math.random() - 1);
             
-            const x = r * Math.sin(phi) * Math.cos(theta);
-            const y = r * Math.sin(phi) * Math.sin(theta);
-            const z = r * Math.cos(phi);
-
-            positions[i * 3] = x;
-            positions[i * 3 + 1] = y;
-            positions[i * 3 + 2] = z;
+            positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+            positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            positions[i * 3 + 2] = r * Math.cos(phi);
             
-            // Neural colors: Red (firing), Cyan (Active Data), White (Nodes), Grey (Structure)
             const choice = Math.random();
-            if (choice > 0.98) color.set("#ef4444"); // Crimson (Spark)
-            else if (choice > 0.95) color.set("#22d3ee"); // Cyan (Data)
-            else if (choice > 0.85) color.set("#ffffff"); // White (Node)
-            else color.set("#404040"); // Lighter Grey (Structure)
+            // Category-inspired colors
+            if (choice > 0.98) color.set("#DC2626"); // Crimson
+            else if (choice > 0.96) color.set("#2563EB"); // Blue
+            else if (choice > 0.94) color.set("#EA580C"); // Orange
+            else if (choice > 0.85) color.set("#333333"); // Grey
+            else color.set("#111111"); // Faint
             
             colors[i * 3] = color.r;
             colors[i * 3 + 1] = color.g;
             colors[i * 3 + 2] = color.b;
+
+            sizes[i] = Math.random();
         }
-        return { positions, colors };
+        return { positions, colors, sizes };
     }, []);
 
     useFrame((state, delta) => {
         if (ref.current) {
-            // Rotation to simulate floating
-            ref.current.rotation.x -= delta / 50;
-            ref.current.rotation.y -= delta / 40;
-            
-            // Breathing effect
+            // Subtle constant rotation
+            ref.current.rotation.y -= delta / 50;
+            ref.current.rotation.x += delta / 100;
+
+            // Mouse interaction (Parallax)
+            const targetX = state.mouse.x * 2;
+            const targetY = state.mouse.y * 2;
+            ref.current.position.x = THREE.MathUtils.lerp(ref.current.position.x, targetX, 0.05);
+            ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, targetY, 0.05);
+
+            // Breathing scale effect
             const s = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.02;
             ref.current.scale.set(s, s, s);
         }
     });
 
     return (
-        <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={ref} positions={sphere.positions} colors={sphere.colors} stride={3} frustumCulled={false}>
+        <group rotation={[0, 0, Math.PI / 8]}>
+            <Points ref={ref} positions={sphere.positions} colors={sphere.colors} stride={3} frustumCulled={true}>
                 <PointMaterial
                     transparent
                     vertexColors
                     size={0.15}
                     sizeAttenuation={true}
                     depthWrite={false}
-                    opacity={0.8}
+                    opacity={0.4}
                     blending={THREE.AdditiveBlending}
                 />
             </Points>
         </group>
     );
-};
+});
 
 const GridFloor = () => {
+    const gridRef = useRef<THREE.Mesh>(null);
+    const lineRef = useRef<THREE.Mesh>(null);
+
+    useFrame((state) => {
+        if (gridRef.current) {
+            // Move grid towards the viewer for a forward-motion effect
+            gridRef.current.position.z = (state.clock.elapsedTime * 2) % 4;
+        }
+        if (lineRef.current) {
+            // Moving scan line
+            lineRef.current.position.z = Math.sin(state.clock.elapsedTime * 0.5) * 40;
+        }
+    });
+
     return (
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -15, 0]}>
-            <planeGeometry args={[100, 100, 40, 40]} />
-            <meshBasicMaterial 
-                color="#333" 
-                wireframe 
-                transparent 
-                opacity={0.08} 
-            />
-        </mesh>
+        <group position={[0, -15, 0]}>
+            <mesh ref={gridRef} rotation={[-Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[100, 100, 40, 40]} />
+                <meshBasicMaterial 
+                    color="#DC2626" 
+                    wireframe 
+                    transparent 
+                    opacity={0.02} 
+                />
+            </mesh>
+            
+            {/* The "Scan" Line */}
+            <mesh ref={lineRef} rotation={[-Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[100, 0.2]} />
+                <meshBasicMaterial color="#DC2626" transparent opacity={0.1} />
+            </mesh>
+
+            {/* Depth Fade */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -20]}>
+                <planeGeometry args={[120, 120]} />
+                <meshBasicMaterial color="#050505" transparent opacity={0.5} />
+            </mesh>
+        </group>
     );
 };
 
-// Controls the camera movement based on scroll position
 const ScrollObserver = () => {
-    useFrame(({ camera }) => {
+    useFrame(({ camera, mouse }) => {
         const scrollY = window.scrollY;
-        // Scroll down (scrollY increases) -> Camera moves UP (positive Y)
-        // This causes the scene objects (at Y=0) to move DOWN relative to the viewport.
-        const targetY = scrollY * 0.015; 
+        // Camera height follows scroll
+        const targetY = (scrollY * 0.012) - 5; 
+        camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05);
         
-        // Also add a slight Z movement to "dive in" as you scroll
-        // const targetZ = 25 - scrollY * 0.005;
-
-        // Smoothly interpolate current camera position to target
-        camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.08);
-        // camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.08);
+        // Dynamic look-at adjustment based on mouse
+        camera.lookAt(mouse.x * 5, -5, -20);
     });
     return null;
 }
@@ -106,28 +133,32 @@ const ScrollObserver = () => {
 export const NeuralBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none bg-[#050505]">
-      {/* dpr prop ensures we don't over-render on 4k/Retina screens */}
-      <Canvas camera={{ position: [0, 0, 25], fov: 60 }} gl={{ antialias: false, powerPreference: "high-performance" }} dpr={[1, 1.5]}>
+      <Canvas 
+        camera={{ position: [0, 0, 35], fov: 55 }} 
+        gl={{ 
+            antialias: false, 
+            powerPreference: "high-performance",
+            alpha: false 
+        }} 
+        dpr={[1, 1.5]}
+      >
         <Suspense fallback={null}>
             <ScrollObserver />
-            
             <color attach="background" args={['#050505']} />
-            
-            {/* Ambient Red Glow for Atmosphere */}
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#550000" distance={50} />
-            <pointLight position={[-10, -10, -10]} intensity={0.5} color="#002244" distance={50} />
-            
             <SynapticField />
-            <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
+            <Stars radius={150} depth={60} count={2500} factor={4} saturation={0} fade speed={0.8} />
             <GridFloor />
+            <fog attach="fog" args={['#050505', 15, 100]} />
             
-            {/* Fog to hide the edges and create depth */}
-            <fog attach="fog" args={['#050505', 10, 80]} />
+            {/* Ambient subtle lighting to catch particle colors */}
+            <ambientLight intensity={0.1} />
+            <pointLight position={[0, 20, 10]} intensity={0.5} color="#DC2626" />
         </Suspense>
       </Canvas>
       
-      {/* Vignette Overlay for cinematic focus */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] opacity-60 pointer-events-none"></div>
+      {/* Vignette & Grain Overlay for cinematic feel */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] opacity-70 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-noise opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
     </div>
   );
 };
