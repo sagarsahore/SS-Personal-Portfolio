@@ -1,93 +1,85 @@
 import React from 'react';
 import { GlassCard } from './GlassCard';
 import { Experience as ExperienceType } from '../types';
-import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, ArrowUpRight } from 'lucide-react';
 
 const experiences: ExperienceType[] = [
     {
         id: '1',
         role: 'Research Scientist (Intern)',
         company: 'DeepMind',
-        period: 'Summer 2024',
-        description: 'Contributed to the Gemini reasoning team. Developed novel chain-of-thought prompting strategies that improved math benchmarks by 4%.',
+        period: '2024',
+        description: 'Contributed to the Gemini reasoning team. Developed novel chain-of-thought prompting strategies that improved math benchmarks by 4%. Investigated sparse autoencoders for feature visualization.',
         skills: ['Python', 'JAX', 'LLMs', 'Research']
     },
     {
         id: '2',
         role: 'PhD Candidate',
         company: 'Stanford University',
-        period: '2022 - Present',
-        description: 'Focusing on mechanistic interpretability of transformer models. Advised by Dr. Fei-Fei Li. Publishing widely in NeurIPS and ICLR.',
+        period: '2022 — Present',
+        description: 'Focusing on mechanistic interpretability of transformer models. Advised by Dr. Fei-Fei Li. Publishing widely in NeurIPS and ICLR. Leading the "Safe AI" reading group.',
         skills: ['PyTorch', 'Academic Writing', 'Latex']
     },
     {
         id: '3',
-        role: 'Senior Machine Learning Engineer',
+        role: 'Senior ML Engineer',
         company: 'OpenAI (Residency)',
-        period: '2021 - 2022',
-        description: 'Worked on infrastructure optimization for distributed training of large-scale vision models. Reduced inference latency by 15%.',
+        period: '2021 — 2022',
+        description: 'Worked on infrastructure optimization for distributed training of large-scale vision models. Reduced inference latency by 15% through quantization and kernel fusion techniques.',
         skills: ['Kubernetes', 'CUDA', 'Distributed Systems']
     },
     {
         id: '4',
-        role: 'Salesforce Developer & Consultant',
+        role: 'Salesforce Developer',
         company: 'CloudFirst Solutions',
-        period: '2019 - 2021',
+        period: '2019 — 2021',
         description: 'Led a team of developers in architecting complex CRM solutions. Built custom Apex frameworks and integrated external Data Lakes with Salesforce.',
-        skills: ['Apex', 'LWC', 'Salesforce Cloud', 'System Architecture']
-    },
-    {
-        id: '5',
-        role: 'Data Analyst',
-        company: 'TechCorp Global',
-        period: '2018 - 2019',
-        description: 'Engineered ETL pipelines processing terabytes of log data. Created dashboards for C-suite executives to monitor KPI metrics.',
-        skills: ['SQL', 'Tableau', 'Python', 'Spark']
+        skills: ['Apex', 'LWC', 'Salesforce Cloud']
     }
 ];
 
 export const Experience: React.FC = () => {
     return (
-        <div className="space-y-8">
-            <h2 className="text-3xl font-medium tracking-tight text-white mb-8">Professional History</h2>
+        <div className="py-20">
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-20">Professional History</h2>
             
-            <div className="relative border-l border-white/10 ml-4 md:ml-6 space-y-12">
+            <div className="relative space-y-24">
+                {/* Vertical Line */}
+                <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-800 to-transparent transform md:-translate-x-1/2 hidden md:block"></div>
+
                 {experiences.map((exp, index) => (
-                    <div key={exp.id} className="relative pl-8 md:pl-12">
-                        {/* Timeline Dot */}
-                        <div className="absolute -left-[5px] top-8 w-2.5 h-2.5 rounded-full bg-indigo-500 ring-4 ring-black/50 shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
+                    <div key={exp.id} className={`flex flex-col md:flex-row gap-8 md:gap-24 items-start ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}>
                         
-                        <GlassCard delay={index * 0.1} className="!p-6 group hover:bg-white/5">
-                            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                                <div>
-                                    <h3 className="text-xl font-medium text-white group-hover:text-indigo-300 transition-colors">
-                                        {exp.role}
-                                    </h3>
-                                    <div className="flex items-center gap-4 text-white/60 mt-1 text-sm">
-                                        <div className="flex items-center gap-1">
-                                            <Briefcase size={14} />
-                                            <span>{exp.company}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2 text-xs font-mono text-white/40 bg-white/5 px-3 py-1 rounded-full w-fit whitespace-nowrap">
-                                    <Calendar size={12} />
-                                    {exp.period}
-                                </div>
+                        {/* Date / Company Side (Sticky-ish look) */}
+                        <div className="w-full md:w-1/2 flex md:justify-end">
+                            <div className={`text-left ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                                <div className="text-6xl font-bold text-zinc-800 tracking-tighter mb-2">{exp.period.split('—')[0].trim()}</div>
+                                <h3 className="text-2xl font-semibold text-white">{exp.company}</h3>
+                                <div className="text-red-500 font-medium mb-4">{exp.role}</div>
                             </div>
-                            
-                            <p className="text-white/60 text-sm leading-relaxed mb-4 max-w-2xl">
-                                {exp.description}
-                            </p>
-                            
-                            <div className="flex flex-wrap gap-2">
-                                {exp.skills.map(skill => (
-                                    <span key={skill} className="text-xs px-2 py-1 rounded bg-white/5 border border-white/5 text-white/40">
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        </GlassCard>
+                        </div>
+
+                        {/* Center Dot */}
+                        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-10 h-10 rounded-full bg-[#020204] border border-zinc-800 z-10">
+                            <div className="w-2 h-2 rounded-full bg-zinc-500"></div>
+                        </div>
+
+                        {/* Content Side */}
+                        <div className="w-full md:w-1/2">
+                            <GlassCard className="!p-8 group hover:border-red-900/30 transition-colors">
+                                <p className="text-zinc-400 leading-relaxed mb-6">
+                                    {exp.description}
+                                </p>
+                                
+                                <div className="flex flex-wrap gap-2">
+                                    {exp.skills.map(skill => (
+                                        <span key={skill} className="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-900 text-zinc-400 border border-white/5">
+                                            {skill}
+                                        </span>
+                                    ))}
+                                </div>
+                            </GlassCard>
+                        </div>
                     </div>
                 ))}
             </div>

@@ -12,8 +12,8 @@ const Speaker = () => {
                 <capsuleGeometry args={[0.3, 1, 4, 16]} />
                 <MeshTransmissionMaterial 
                     backside
-                    samples={16}
-                    resolution={512}
+                    samples={8} // Reduced samples for performance
+                    resolution={256} // Reduced resolution for performance
                     transmission={1}
                     roughness={0.1}
                     thickness={0.5}
@@ -31,8 +31,8 @@ const Speaker = () => {
                 <sphereGeometry args={[0.25, 32, 32]} />
                  <MeshTransmissionMaterial 
                     backside
-                    samples={16}
-                    resolution={512}
+                    samples={8}
+                    resolution={256}
                     transmission={1}
                     roughness={0.1}
                     thickness={0.5}
@@ -51,7 +51,7 @@ const Speaker = () => {
 
 // The Audience (Instanced Particles)
 const Audience = () => {
-    const count = 200;
+    const count = 150; // Optimized count
     const meshRef = useRef<THREE.InstancedMesh>(null);
     const dummy = useMemo(() => new THREE.Object3D(), []);
     
@@ -124,7 +124,7 @@ const DynamicSpotlight = () => {
 export const Presenter3D: React.FC = () => {
     return (
         <div className="w-full h-[500px] rounded-3xl overflow-hidden relative border border-white/5 bg-gradient-to-b from-indigo-900/20 to-black/40 cursor-grab active:cursor-grabbing">
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [4, 2, 6], fov: 45 }}>
+            <Canvas shadows dpr={[1, 1.5]} camera={{ position: [4, 2, 6], fov: 45 }}>
                 <ambientLight intensity={0.2} />
                 
                 <DynamicSpotlight />

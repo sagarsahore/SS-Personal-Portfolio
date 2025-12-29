@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface Publication {
   id: string;
   title: string;

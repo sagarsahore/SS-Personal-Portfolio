@@ -1,31 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface GlassCardProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  hoverEffect?: boolean;
 }
 
-export const GlassCard: React.FC<GlassCardProps> = ({ children, className = '', delay = 0 }) => {
+export const GlassCard: React.FC<GlassCardProps> = ({ 
+  children, 
+  className = '', 
+  delay = 0,
+  hoverEffect = true
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
-      className={`glass-panel rounded-[2rem] p-8 relative overflow-hidden group hover:border-white/20 transition-colors duration-300 will-change-transform ${className}`}
-      style={{
-        transform: 'translateZ(0)', // Force hardware acceleration
-        backfaceVisibility: 'hidden'
-      }}
+      transition={{ duration: 0.8, delay, ease: [0.25, 1, 0.5, 1] }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`relative overflow-hidden rounded-[24px] bg-[#1c1c1e]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl ${className}`}
     >
-      {/* Specular highlight gradient on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-      
-      <div className="relative z-10 h-full">
-        {children}
-      </div>
+        {/* Specular Highlight (Top Edge) */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50"></div>
+
+        {/* Content */}
+        <div className="relative z-10 h-full">
+            {children}
+        </div>
+        
+        {/* Interactive Hover Glow (Subtle) */}
+        {hoverEffect && (
+            <motion.div 
+                className="absolute inset-0 bg-white/5 pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+            />
+        )}
     </motion.div>
   );
 };

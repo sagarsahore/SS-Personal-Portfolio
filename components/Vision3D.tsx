@@ -8,7 +8,7 @@ const ParticleWave = () => {
     
     // Generate particles in a cube/grid
     const particles = useMemo(() => {
-        const count = 3000;
+        const count = 2000; // Optimized count
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
         const color = new THREE.Color();
@@ -34,14 +34,16 @@ const ParticleWave = () => {
     }, []);
 
     useFrame((state) => {
-        if (!ref.current) return;
+        if (!ref.current || !ref.current.geometry || !ref.current.geometry.attributes.position) return;
         
         const t = state.clock.getElapsedTime();
         const positions = ref.current.geometry.attributes.position.array as Float32Array;
         
         // Morph particles based on time
-        for (let i = 0; i < 3000; i++) {
+        for (let i = 0; i < 2000; i++) {
             const i3 = i * 3;
+            if (i3 + 2 >= positions.length) break;
+
             const x = particles.positions[i3];
             const z = particles.positions[i3 + 2];
             
@@ -70,7 +72,7 @@ const ParticleWave = () => {
 export const Vision3D: React.FC = () => {
   return (
     <div className="w-full h-full min-h-[400px] rounded-3xl overflow-hidden relative">
-      <Canvas camera={{ position: [0, 0, 10], fov: 60 }} gl={{ alpha: true }}>
+      <Canvas camera={{ position: [0, 0, 10], fov: 60 }} gl={{ alpha: true }} dpr={[1, 1.5]}>
         <ParticleWave />
       </Canvas>
        <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(5,5,5,0.8)]"></div>

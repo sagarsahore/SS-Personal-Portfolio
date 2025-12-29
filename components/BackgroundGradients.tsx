@@ -1,36 +1,37 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 export const BackgroundGradients: React.FC = () => {
   const { scrollY } = useScroll();
   
-  // Parallax effects: move background elements slowly based on scroll
+  // Slower, smoother parallax
   const y1 = useTransform(scrollY, [0, 2000], [0, -300]);
   const y2 = useTransform(scrollY, [0, 2000], [0, -150]);
-  const y3 = useTransform(scrollY, [0, 2000], [0, -450]);
-  const opacity = useTransform(scrollY, [0, 1000], [1, 0.6]);
+  
+  const opacity = useTransform(scrollY, [0, 800], [0.8, 0.4]);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Top Left - Indigo/Violet */}
+    <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-[#050505]">
+      {/* Primary Glow - Crimson Red (The Tie/Accent) */}
       <motion.div 
         style={{ y: y1, opacity }}
-        className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-900/20 blur-[120px] mix-blend-screen animate-blob" 
+        className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-[#991B1B]/15 blur-[150px]" 
       />
       
-      {/* Top Right - Teal/Cyan */}
+      {/* Secondary Glow - Warm Stone/Grey (The Suit) */}
       <motion.div 
         style={{ y: y2, opacity }}
-        className="absolute top-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-teal-900/20 blur-[100px] mix-blend-screen animate-blob animation-delay-2000" 
+        className="absolute top-[-5%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#44403C]/10 blur-[120px]" 
       />
       
-      {/* Bottom Center - Deep Violet */}
+      {/* Bottom Anchor - Deep Charcoal (Grounding) */}
       <motion.div 
-        style={{ y: y3, opacity }}
-        className="absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-violet-900/10 blur-[130px] mix-blend-screen animate-blob animation-delay-4000" 
+        style={{ opacity }}
+        className="absolute bottom-[-30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-[#1C1917]/20 blur-[180px]" 
       />
       
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
+      {/* Film Grain Texture */}
+      <div className="absolute inset-0 bg-noise opacity-[0.03] mix-blend-overlay"></div>
     </div>
   );
 };

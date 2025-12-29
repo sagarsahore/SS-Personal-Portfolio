@@ -1,14 +1,7 @@
 import React, { useRef, useMemo, Suspense } from 'react';
-import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { MeshTransmissionMaterial, Float, Environment, PerspectiveCamera, Stars } from '@react-three/drei';
 import * as THREE from 'three';
-
-// Augment the global JSX namespace to include Three.js elements
-declare global {
-  namespace JSX {
-    interface IntrinsicElements extends ThreeElements {}
-  }
-}
 
 const FluidSphere = () => {
   const meshRef = useRef<THREE.Mesh>(null);

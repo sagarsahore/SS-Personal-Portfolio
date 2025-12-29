@@ -1,13 +1,7 @@
 import React, { useRef, useMemo, useState, Suspense } from 'react';
-import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { MeshTransmissionMaterial, Float, Environment, PerspectiveCamera, Stars, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements extends ThreeElements {}
-  }
-}
 
 // LiDAR Scanning Beam
 const ScanningBeam = () => {

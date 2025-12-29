@@ -1,118 +1,219 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GlassCard } from './GlassCard';
-import { Presenter3D } from './Presenter3D';
-import { Award, BadgeCheck, BookOpen, ExternalLink } from 'lucide-react';
+import { Certifications3D } from './Certifications3D';
+import { Award, BadgeCheck, BookOpen, ExternalLink, Cloud, Database, BrainCircuit, Calendar, Hash } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Certification {
     id: string;
     title: string;
     issuer: string;
     date: string;
+    category: 'Salesforce' | 'AWS' | 'AI';
+    status: 'Verified' | 'Planned';
     credentialId?: string;
-    icon: React.ReactNode;
-    color: string;
+    description: string;
 }
 
 const certs: Certification[] = [
+    // SALESFORCE (3)
     {
-        id: '1',
+        id: 'sf-1',
+        title: 'Salesforce Certified Technical Architect',
+        issuer: 'Salesforce',
+        date: 'June 2021',
+        category: 'Salesforce',
+        status: 'Verified',
+        credentialId: 'CTA-99210',
+        description: 'The pinnacle credential for designing high-performance technical solutions on the Salesforce Platform across all domains.'
+    },
+    {
+        id: 'sf-2',
+        title: 'Platform Developer II',
+        issuer: 'Salesforce',
+        date: 'Aug 2020',
+        category: 'Salesforce',
+        status: 'Verified',
+        credentialId: 'PD2-8831',
+        description: 'Advanced programmatic capabilities of the Lightning Platform, data modeling, and complex business logic integration.'
+    },
+    {
+        id: 'sf-3',
+        title: 'JavaScript Developer I',
+        issuer: 'Salesforce',
+        date: 'Feb 2020',
+        category: 'Salesforce',
+        status: 'Verified',
+        credentialId: 'JS1-4420',
+        description: 'Demonstrated proficiency in JavaScript for Lightning Web Components development and frontend architecture.'
+    },
+
+    // AWS (3)
+    {
+        id: 'aws-1',
+        title: 'AWS Certified Machine Learning - Specialty',
+        issuer: 'Amazon Web Services',
+        date: 'Jan 2024',
+        category: 'AWS',
+        status: 'Verified',
+        credentialId: 'AWS-ML-291',
+        description: 'Validation of expertise in building, training, tuning, and deploying machine learning models on AWS.'
+    },
+    {
+        id: 'aws-2',
+        title: 'AWS Certified Solutions Architect',
+        issuer: 'Amazon Web Services',
+        date: 'Nov 2023',
+        category: 'AWS',
+        status: 'Verified',
+        credentialId: 'AWS-SAA-882',
+        description: 'Comprehensive understanding of designing distributed systems that are scalable, reliable, and cost-efficient.'
+    },
+    {
+        id: 'aws-3',
+        title: 'AWS Certified Developer',
+        issuer: 'Amazon Web Services',
+        date: 'Sep 2023',
+        category: 'AWS',
+        status: 'Verified',
+        credentialId: 'AWS-DVA-110',
+        description: 'Proficiency in developing, deploying, and debugging cloud-based applications using AWS services.'
+    },
+
+    // AI (Planned)
+    {
+        id: 'ai-1',
+        title: 'TensorFlow Developer Certificate',
+        issuer: 'Google',
+        date: 'Est. Q3 2025',
+        category: 'AI',
+        status: 'Planned',
+        description: 'Targeting mastery in building scalable computer vision models and natural language processing systems using TensorFlow.'
+    },
+    {
+        id: 'ai-2',
         title: 'Deep Learning Specialization',
         issuer: 'DeepLearning.AI',
-        date: 'Issued Oct 2023',
-        credentialId: 'DL-84920',
-        icon: <BookOpen size={24} />,
-        color: 'text-indigo-400'
-    },
-    {
-        id: '2',
-        title: 'AWS Certified Machine Learning',
-        issuer: 'Amazon Web Services',
-        date: 'Issued Jan 2024',
-        credentialId: 'AWS-ML-291',
-        icon: <BadgeCheck size={24} />,
-        color: 'text-orange-400'
-    },
-    {
-        id: '3',
-        title: 'TensorFlow Developer',
-        issuer: 'Google Developers',
-        date: 'Issued Nov 2023',
-        credentialId: 'G-TF-992',
-        icon: <BadgeCheck size={24} />,
-        color: 'text-teal-400'
-    },
-    {
-        id: '4',
-        title: 'Best Research Paper Award',
-        issuer: 'UoA Grad Symposium',
-        date: 'Awarded Dec 2024',
-        icon: <Award size={24} />,
-        color: 'text-yellow-400'
+        date: 'Est. Q4 2025',
+        category: 'AI',
+        status: 'Planned',
+        description: 'Advanced curriculum covering Convolutional Neural Networks, Sequence Models, and Hyperparameter tuning.'
     }
 ];
 
 export const Certifications: React.FC = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const activeCert = certs[activeIndex];
+
+    // Get color based on category
+    const getCategoryColor = (cat: string) => {
+        switch(cat) {
+            case 'Salesforce': return 'text-sky-400 border-sky-500/30 bg-sky-500/10';
+            case 'AWS': return 'text-orange-400 border-orange-500/30 bg-orange-500/10';
+            case 'AI': return 'text-violet-400 border-violet-500/30 bg-violet-500/10';
+            default: return 'text-white border-white/30 bg-white/10';
+        }
+    };
+
     return (
-        <section>
-             <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+        <section className="py-20">
+             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                 <div>
-                    <h2 className="text-3xl font-medium tracking-tight text-white mb-2">Credentials & Awards</h2>
+                    <h2 className="text-3xl font-medium tracking-tight text-white mb-2">Credential Vault</h2>
                     <p className="text-white/50 max-w-xl">
-                        Industry-recognized certifications and academic honors reflecting technical mastery.
+                        Verified technical competencies across Enterprise Cloud, Infrastructure, and Artificial Intelligence domains.
                     </p>
                 </div>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 
-                {/* Visual Side (3D Model) - Takes up 5 columns */}
-                <div className="lg:col-span-5 h-full min-h-[400px]">
-                    <Presenter3D />
+                {/* LEFT: Content Panel (Span 5) */}
+                <div className="lg:col-span-5 order-2 lg:order-1 h-full min-h-[400px] flex flex-col justify-center">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeCert.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <GlassCard className="!p-8 relative overflow-hidden">
+                                {/* Background Glow based on category */}
+                                <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-[80px] opacity-20 pointer-events-none ${
+                                    activeCert.category === 'Salesforce' ? 'bg-sky-500' : 
+                                    activeCert.category === 'AWS' ? 'bg-orange-500' : 'bg-violet-500'
+                                }`} />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className={`px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest border ${getCategoryColor(activeCert.category)}`}>
+                                            {activeCert.category}
+                                        </div>
+                                        {activeCert.status === 'Verified' ? (
+                                            <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-medium uppercase tracking-wider">
+                                                <BadgeCheck size={14} /> Verified
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-medium uppercase tracking-wider animate-pulse">
+                                                <div className="w-2 h-2 rounded-full bg-zinc-500" /> In Progress
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
+                                        {activeCert.title}
+                                    </h3>
+                                    <div className="text-lg text-white/60 mb-6">{activeCert.issuer}</div>
+
+                                    <div className="space-y-4 mb-8">
+                                        <div className="flex items-center gap-3 text-zinc-400 text-sm">
+                                            <Calendar size={16} className="text-zinc-600" />
+                                            <span>{activeCert.date}</span>
+                                        </div>
+                                        {activeCert.credentialId && (
+                                            <div className="flex items-center gap-3 text-zinc-400 text-sm">
+                                                <Hash size={16} className="text-zinc-600" />
+                                                <span className="font-mono text-xs">{activeCert.credentialId}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <p className="text-zinc-400 text-sm leading-relaxed border-t border-white/5 pt-6">
+                                        {activeCert.description}
+                                    </p>
+
+                                    {activeCert.status === 'Verified' && (
+                                        <div className="mt-8">
+                                            <button className="flex items-center gap-2 text-xs font-medium text-white/40 hover:text-white transition-colors">
+                                                Verify on Credly <ExternalLink size={12} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </GlassCard>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
 
-                {/* Content Side - Takes up 7 columns */}
-                <div className="lg:col-span-7 grid grid-cols-1 gap-4">
-                    {certs.map((cert, index) => (
-                        <GlassCard key={cert.id} delay={index * 0.1} className="!p-6 group border-l-4 border-l-transparent hover:border-l-indigo-500 transition-all">
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="flex items-center gap-5">
-                                    <div className={`w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center ${cert.color} group-hover:bg-white/10 transition-colors`}>
-                                        {cert.icon}
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-medium text-white group-hover:text-indigo-200 transition-colors">
-                                            {cert.title}
-                                        </h3>
-                                        <div className="text-sm text-white/50 mt-1">
-                                            {cert.issuer}
-                                        </div>
-                                        <div className="flex items-center gap-3 mt-2 text-xs font-mono text-white/30 uppercase tracking-wider">
-                                            <span>{cert.date}</span>
-                                            {cert.credentialId && (
-                                                <>
-                                                    <span className="w-1 h-1 rounded-full bg-white/20"></span>
-                                                    <span>ID: {cert.credentialId}</span>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <button className="p-2 rounded-full hover:bg-white/10 text-white/20 hover:text-white transition-colors">
-                                    <ExternalLink size={18} />
-                                </button>
-                            </div>
-                        </GlassCard>
-                    ))}
+                {/* RIGHT: 3D Holographic Stage (Span 7) */}
+                <div className="lg:col-span-7 order-1 lg:order-2">
+                    <Certifications3D 
+                        certs={certs} 
+                        activeIndex={activeIndex} 
+                        onSelect={setActiveIndex} 
+                    />
                     
-                    <GlassCard delay={0.5} className="!p-6 !bg-indigo-900/10 border-indigo-500/20 flex items-center justify-between">
-                         <div className="text-sm text-indigo-200/80">
-                            Looking for a full academic CV?
-                         </div>
-                         <button className="text-xs font-medium bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 px-4 py-2 rounded-full transition-colors border border-indigo-500/30">
-                            Download PDF
-                         </button>
-                    </GlassCard>
+                    {/* Navigation Dots for Mobile (Optional visual cue) */}
+                    <div className="flex justify-center gap-2 mt-4 lg:hidden">
+                        {certs.map((_, i) => (
+                            <button 
+                                key={i}
+                                onClick={() => setActiveIndex(i)}
+                                className={`w-2 h-2 rounded-full transition-all ${i === activeIndex ? 'bg-white w-4' : 'bg-white/20'}`}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

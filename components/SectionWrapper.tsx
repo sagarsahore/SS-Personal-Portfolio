@@ -24,10 +24,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
       transition={{ 
         duration: 0.8, 
         delay, 
-        ease: [0.22, 1, 0.36, 1], // Custom cubic bezier for "Apple-like" smoothing
-        type: "spring",
-        stiffness: 50,
-        damping: 20
+        ease: [0.22, 1, 0.36, 1]
       }}
     >
       {children}
