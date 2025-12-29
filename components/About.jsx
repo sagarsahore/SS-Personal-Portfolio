@@ -1,10 +1,10 @@
 import React from 'react';
-import { GlassCard } from './GlassCard';
-import { Vision3D } from './Vision3D';
+import { GlassCard } from './GlassCard.jsx';
+import { Vision3D } from './Vision3D.jsx';
 import { Cpu, Globe, Eye, Scan, Code, Layers, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export const About: React.FC = () => {
+export const About = () => {
   const navigate = useNavigate();
 
   return (

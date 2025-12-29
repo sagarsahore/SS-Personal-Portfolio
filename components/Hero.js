@@ -1,10 +1,10 @@
 import React from 'react';
-import { Hero3D } from './Hero3D';
-import { MagneticButton } from './MagneticButton';
+import { Hero3D } from './Hero3D.js';
+import { MagneticButton } from './MagneticButton.js';
 import { ArrowRight, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export const Hero: React.FC = () => {
+export const Hero = () => {
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -22,7 +22,7 @@ export const Hero: React.FC = () => {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
     }
   };
 
