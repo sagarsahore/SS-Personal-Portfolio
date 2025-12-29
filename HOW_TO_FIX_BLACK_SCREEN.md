@@ -65,4 +65,4 @@ npm install
 npm run dev
 ```
 
-If you see "VITE ready" message, open http://localhost:3000 in your browser. You should see the portfolio!
+If you see a message like "VITE v6.x.x ready in XXms", open http://localhost:3000 in your browser. You should see the portfolio!
