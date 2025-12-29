@@ -154,7 +154,7 @@ export const NeuralLiquidCore: React.FC = () => {
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="indigo" />
         
         <Suspense fallback={null}>
-            {/* Using built-in lights for better compatibility and offline support */}
+            {/* Using scene lights instead of Environment for better offline compatibility */}
             <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
             <FluidSphere />
             <Particles />
